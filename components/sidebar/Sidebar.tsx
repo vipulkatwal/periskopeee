@@ -1,6 +1,6 @@
 'use client';
 
-import { AnalyticsIcon, BroadcastIcon, PeriskopeIcon } from "@/utils/Icons";
+import { AnalyticsIcon, BroadcastIcon, PeriskopeIcon } from "../utils/Icons";
 import { IconType } from "react-icons";
 import { IoChatbubbleEllipses, IoTicket } from "react-icons/io5";
 import { FaListUl } from "react-icons/fa";
@@ -63,7 +63,9 @@ const Sidebar: React.FC = () => {
 
 function SidebarIcon({ icon: Icon, extraClass = "" }: { icon: React.ComponentType<{ size?: number }>, extraClass?: string }) {
   return (
-    <div className={`flex items-center justify-center w-10 h-10 rounded-full cursor-pointer text-[#3a3d42] ${extraClass}`}>
+    <div
+      className={`flex items-center justify-center w-10 h-10 rounded-full cursor-pointer text-[#3a3d42] transition-colors duration-200 hover:bg-gray-100 hover:text-green-500 ${extraClass}`}
+    >
       <Icon size={20} />
     </div>
   );
