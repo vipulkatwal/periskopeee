@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
 
 /**
  * Registration page for new users.
@@ -20,10 +21,48 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setTimeout(() => {
+    // Supabase Auth sign up
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    if (signUpError) {
+      setError(signUpError.message);
       setLoading(false);
-      router.push('/login');
-    }, 1000);
+      return;
+    }
+    // Insert into profiles table if not exists
+    const user = data.user;
+    if (user) {
+      const { data: existingProfile } = await supabase.from('profiles').select('id').eq('id', user.id).single();
+      if (!existingProfile) {
+        const { error: profileError } = await supabase.from('profiles').insert({
+          id: user.id,
+          name: username,
+          avatar_url: avatar,
+          created_at: new Date().toISOString(),
+        });
+        if (profileError) {
+          setError(profileError.message);
+          setLoading(false);
+          return;
+        }
+      }
+      // Log the user in automatically
+      const { error: loginError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      setLoading(false);
+      if (loginError) {
+        setError(loginError.message);
+        return;
+      }
+      router.push('/chat');
+      return;
+    }
+    setLoading(false);
+    setError('User creation failed.');
   };
 
   return (

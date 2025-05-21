@@ -11,13 +11,12 @@ import MemberAssign from './MemberAssign';
  */
 export default function Sidebar() {
   return (
-    <aside className="w-[370px] bg-white border-r border-gray-200 flex flex-col h-full">
-      {/* Logo at the top */}
-      <div className="flex justify-center py-6 border-b border-gray-200">
-        <img src="/peris.png" alt="Periskope Logo" className="w-12 h-12" />
-      </div>
-      {/* Sidebar icons */}
-      <div className="flex flex-col gap-4 px-2 py-4 border-b border-gray-200">
+    <div className="flex h-full">
+      {/* Icon bar */}
+      <div className="flex flex-col items-center bg-[#f6f7f9] w-16 py-4 gap-2 border-r border-gray-200">
+        <div className="mb-4">
+          <img src="/peris.png" alt="Periskope Logo" className="w-10 h-10 rounded-full shadow border-2 border-white bg-white" />
+        </div>
         <SidebarIcon icon={<FiHome size={22} />} />
         <SidebarIcon icon={<FiMessageCircle size={22} />} />
         <SidebarIcon icon={<FiEdit2 size={22} />} />
@@ -32,23 +31,30 @@ export default function Sidebar() {
         <SidebarIcon icon={<FiStar size={22} />} />
         <SidebarIcon icon={<FiPlay size={22} />} />
       </div>
-      {/* Top: Custom filter and search */}
-      <div className="p-4 border-b border-gray-200">
-        <div className="flex items-center justify-between mb-2">
-          <span className="font-semibold text-green-700 text-lg">Custom filter</span>
+      {/* Chat list panel */}
+      <aside className="flex flex-col h-full w-[340px] bg-white rounded-tr-2xl shadow-lg overflow-hidden">
+        {/* Logo at the top, centered */}
+        <div className="flex justify-center pt-6 pb-2">
+          <img src="/peris.png" alt="Periskope Logo" className="w-12 h-12 rounded-full shadow border-2 border-white bg-white" />
         </div>
-        <ChatFilter />
-      </div>
-      {/* Chat list */}
-      <div className="flex-1 overflow-y-auto">
-        <ChatList />
-      </div>
-      {/* Bottom: Labels and member assign */}
-      <div className="p-4 border-t border-gray-200">
-        <LabelList />
-        <MemberAssign />
-      </div>
-    </aside>
+        {/* Top: Custom filter and search */}
+        <div className="px-4 pt-2 pb-2 border-b border-gray-100">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-semibold text-green-700 text-lg">Custom filter</span>
+          </div>
+          <ChatFilter />
+        </div>
+        {/* Chat list */}
+        <div className="flex-1 overflow-y-auto bg-[#f7f8fa]">
+          <ChatList />
+        </div>
+        {/* Bottom: Labels and member assign */}
+        <div className="p-4 border-t border-gray-100">
+          <LabelList />
+          <MemberAssign />
+        </div>
+      </aside>
+    </div>
   );
 }
 
