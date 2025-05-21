@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 import { FiCircle } from 'react-icons/fi';
 
 /**
@@ -20,21 +21,25 @@ interface Chat {
 export default function ChatList() {
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch chats from Supabase (replace with your own query as needed)
+    if (!user) return;
     async function fetchChats() {
       setLoading(true);
+      // Get chats where the user is a member
       const { data, error } = await supabase
-        .from('chats')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (!error && data) setChats(data);
+        .from('chat_members')
+        .select('chat_id, chats (id, title)')
+        .eq('user_id', user.id);
+      if (!error && data) {
+        setChats(data.map((row: any) => row.chats));
+      }
       setLoading(false);
     }
     fetchChats();
-  }, []);
+  }, [user]);
 
   if (loading) {
     return <div className="p-4 text-gray-400">Loading chats...</div>;
@@ -49,13 +54,13 @@ export default function ChatList() {
       {chats.map(chat => (
         <li
           key={chat.id}
-          className="flex items-center px-4 py-3 cursor-pointer hover:bg-green-50 border-b"
+          className="flex items-center px-4 py-3 cursor-pointer hover:bg-green-50 border-b border-gray-100"
           onClick={() => router.push(`/chat/${chat.id}`)}
         >
           {/* Status icon (replace with actual logic) */}
           <FiCircle className="text-green-400 mr-3" size={20} />
           <div className="flex-1">
-            <div className="font-medium">{chat.title}</div>
+            <div className="font-medium text-gray-900">{chat.title}</div>
             {/* Add last message, labels, etc. here */}
           </div>
           {/* Example: unread badge */}
