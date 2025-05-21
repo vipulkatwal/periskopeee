@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import ChatBubble from '../ui/ChatBubble';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '../utils/AuthProvider';
 
 /**
  * Props for MessageList: receives the chatId to fetch messages.

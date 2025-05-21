@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '../utils/AuthProvider';
 import { FiSend } from 'react-icons/fi';
 
 /**

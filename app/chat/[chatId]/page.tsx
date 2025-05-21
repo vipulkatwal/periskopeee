@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { useAuth } from '@/components/AuthProvider';
+import { useAuth } from '@/components/utils/AuthProvider';
 import { useParams } from 'next/navigation';
 import { FiRefreshCw, FiHelpCircle, FiPhone, FiSearch, FiMoreVertical, FiSmile, FiPaperclip, FiMic, FiSend } from 'react-icons/fi';
 import Avatar from '@/components/ui/Avatar';
