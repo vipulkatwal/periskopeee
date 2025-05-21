@@ -7,6 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 /**
  * Reusable button component.
+ * Accepts all standard button props and custom className.
  */
 export default function Button({ children, className, ...props }: ButtonProps) {
   return (
