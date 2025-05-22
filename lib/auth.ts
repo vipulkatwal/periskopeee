@@ -1,4 +1,4 @@
-import { supabase } from '../components/utils/supabase-server';
+import { supabase } from '@/components/utils/supabase-server';
 import { User } from '@supabase/supabase-js';
 
 /**

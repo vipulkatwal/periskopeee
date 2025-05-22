@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabaseClient } from "./supabase-client";
 import type { User } from "@supabase/supabase-js";
-import type { Database } from "@/types/supabase";
+import type { Database } from "../types/supabase";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
