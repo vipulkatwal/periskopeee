@@ -6,8 +6,10 @@ import { createBrowserSupabaseClient } from "./utils/supabase-client";
 import type { User } from "@supabase/supabase-js";
 import type { Database } from "./types/supabase";
 
+// Type definition for user profile from database
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
+// Type definition for authentication context
 type AuthContextType = {
   user: User | null;
   profile: Profile | null;
@@ -16,15 +18,18 @@ type AuthContextType = {
   refreshProfile: () => Promise<void>;
 };
 
+// Create authentication context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  // State management for user, profile and loading status
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const supabase = createBrowserSupabaseClient();
 
+  // Function to refresh user profile data
   const refreshProfile = async () => {
     if (!user) return;
 
@@ -47,6 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    // Function to get initial user session and profile
     const getUser = async () => {
       setLoading(true);
       try {
@@ -55,7 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (session?.user) {
           setUser(session.user);
 
-          // Fetch user profile
+          // Fetch user profile from database
           const { data: profileData } = await supabase
             .from("profiles")
             .select("*")
@@ -73,13 +79,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     getUser();
 
-    // Listen for auth state changes
+    // Set up listener for authentication state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (session?.user) {
           setUser(session.user);
           await refreshProfile();
         } else {
+          // Clear user and profile data on sign out
           setUser(null);
           setProfile(null);
         }
@@ -89,11 +96,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     );
 
+    // Cleanup subscription on unmount
     return () => {
       subscription.unsubscribe();
     };
   }, [supabase, router]);
 
+  // Function to handle user sign out
   const signOut = async () => {
     await supabase.auth.signOut();
     router.push("/auth/signin");
@@ -106,6 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Custom hook to use authentication context
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

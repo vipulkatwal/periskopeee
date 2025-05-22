@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/components/utils/AuthProvider";
+import { useAuth } from "@/components/AuthProvider";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 

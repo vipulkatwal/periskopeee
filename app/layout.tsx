@@ -4,7 +4,6 @@ import '../styles/globals.css';
 import Sidebar from "@/components/sidebar/Sidebar";
 import Topbar from "@/components/Topbar";
 import { AuthProvider } from "@/components/AuthProvider";
-import AuthGate from "@/components/AuthGate";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Periskope",
-  description: "Periskope",
+  title: "Periskope: Chat App",
+  description: "Assignment",
 };
 
 export default function RootLayout({
@@ -32,7 +31,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <AuthGate>
             <div className="flex h-screen">
               <Sidebar />
 
@@ -41,7 +39,6 @@ export default function RootLayout({
                 <div className="flex-1 overflow-auto bg-white">{children}</div>
               </div>
             </div>
-          </AuthGate>
         </AuthProvider>
       </body>
     </html>
