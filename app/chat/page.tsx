@@ -8,6 +8,9 @@ import { ContactsList } from "@/components/chat/ContactsList";
 import { ChatArea } from "@/components/chat/ChatArea";
 import { FiArrowLeft } from "react-icons/fi";
 
+/**
+ * Formats a date string into a relative date (Today, Yesterday) or full date
+ */
 const formatMessageDate = (dateString: string): string => {
   if (!dateString) return '';
 
@@ -53,6 +56,7 @@ const ChatsPage: React.FC = () => {
     }
   }, [selectedContact]);
 
+  // Handle responsive layout changes on window resize
   useEffect(() => {
     const handleResize = () => {
       const wasDesktop = window.innerWidth >= 768;
@@ -80,6 +84,7 @@ const ChatsPage: React.FC = () => {
     }
   }, [user?.id]);
 
+  // Subscribe to real-time message updates
   useEffect(() => {
     if (!user?.id) return;
 
@@ -116,6 +121,7 @@ const ChatsPage: React.FC = () => {
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+  // Load contacts with retry logic for handling permission issues
   const loadContacts = async () => {
     if (!user?.id) return;
 
