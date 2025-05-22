@@ -5,12 +5,22 @@ import { useAuth } from '@/components/utils/AuthProvider';
 import { useParams } from 'next/navigation';
 import { FiRefreshCw, FiHelpCircle, FiPhone, FiSearch, FiMoreVertical, FiSmile, FiPaperclip, FiMic, FiSend } from 'react-icons/fi';
 import Avatar from '@/components/ui/Avatar';
+import ChatBubble from '@/components/ui/ChatBubble';
+
+// Define a type for messages
+interface Message {
+  id: string;
+  content: string;
+  sender_id: string;
+  created_at: string;
+  [key: string]: any;
+}
 
 export default function ChatConversationPage() {
   const params = useParams();
   const chatId = Array.isArray(params.chatId) ? params.chatId[0] : params.chatId;
   const { user } = useAuth();
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +44,7 @@ export default function ChatConversationPage() {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `chat_id=eq.${chatId}` },
         payload => {
-          setMessages(prev => [...prev, payload.new]);
+          setMessages(prev => [...prev, payload.new as Message]);
         }
       )
       .subscribe();
@@ -63,11 +73,12 @@ export default function ChatConversationPage() {
   }
 
   // Group messages by date
-  const grouped = messages.reduce((acc, msg) => {
-    if (!acc[msg.date]) acc[msg.date] = [];
-    acc[msg.date].push(msg);
+  const grouped: Record<string, Message[]> = messages.reduce((acc, msg) => {
+    const date = msg.created_at.split('T')[0];
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(msg);
     return acc;
-  }, {} as Record<string, typeof messages>);
+  }, {} as Record<string, Message[]>);
 
   return (
     <div className="flex flex-col flex-1 h-full">
@@ -95,21 +106,22 @@ export default function ChatConversationPage() {
             <div className="flex justify-center my-4">
               <span className="bg-gray-200 text-gray-500 text-xs px-3 py-1 rounded-full shadow">{date}</span>
             </div>
-            {msgs.map(msg => (
-              <div key={msg.id} className={`flex ${msg.sender_id === user?.id ? 'justify-end' : 'justify-start'} mb-2`}>
-                <div className={`rounded-lg px-4 py-2 max-w-md shadow text-sm ${msg.sender_id === user?.id ? 'bg-green-100 text-right text-gray-900' : 'bg-white text-left text-gray-800'}`}>
-                  <div>{msg.content}</div>
-                  <div className="text-xs text-gray-400 mt-1 text-right">{new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                </div>
-              </div>
+            {(msgs as Message[]).map((msg) => (
+              <ChatBubble
+                key={msg.id}
+                content={msg.content}
+                timestamp={new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                isSender={msg.sender_id === user?.id}
+              />
             ))}
           </div>
         ))}
+        <div ref={bottomRef} />
       </div>
       {/* Message Input */}
-      <div className="p-4 border-t flex items-center gap-2 bg-[#f7f8fa]">
-        <button className="text-gray-400 hover:text-green-600"><FiSmile size={22} /></button>
-        <button className="text-gray-400 hover:text-green-600"><FiPaperclip size={22} /></button>
+      <form onSubmit={sendMessage} className="p-4 border-t flex items-center gap-2 bg-[#f7f8fa]">
+        <button type="button" className="text-gray-400 hover:text-green-600"><FiSmile size={22} /></button>
+        <button type="button" className="text-gray-400 hover:text-green-600"><FiPaperclip size={22} /></button>
         <input
           type="text"
           placeholder="Message..."
@@ -117,9 +129,9 @@ export default function ChatConversationPage() {
           value={input}
           onChange={e => setInput(e.target.value)}
         />
-        <button className="text-gray-400 hover:text-green-600"><FiMic size={22} /></button>
-        <button className="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 transition"><FiSend size={20} /></button>
-      </div>
+        <button type="button" className="text-gray-400 hover:text-green-600"><FiMic size={22} /></button>
+        <button type="submit" className="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 transition"><FiSend size={20} /></button>
+      </form>
     </div>
   );
 }

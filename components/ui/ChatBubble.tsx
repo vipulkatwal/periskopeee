@@ -6,9 +6,10 @@ import clsx from 'clsx';
 interface ChatBubbleProps {
   content: string;
   isSender: boolean;
+  timestamp?: string;
 }
 
-export default function ChatBubble({ content, isSender }: ChatBubbleProps) {
+export default function ChatBubble({ content, isSender, timestamp }: ChatBubbleProps) {
   return (
     <div className={clsx(
       "flex items-end mb-2",
@@ -21,6 +22,9 @@ export default function ChatBubble({ content, isSender }: ChatBubbleProps) {
           : "bg-white text-left text-gray-800"
       )}>
         <div>{content}</div>
+        {timestamp && (
+          <div className="text-xs text-gray-400 mt-1 text-right">{timestamp}</div>
+        )}
       </div>
     </div>
   );
