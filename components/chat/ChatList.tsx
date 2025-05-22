@@ -34,7 +34,7 @@ const mockChats = [
     id: '3',
     name: '+91 99999 99999',
     avatar: undefined,
-    lastMessage: 'Hi there, I'm Swapnika, Co-Founder of ...',
+    lastMessage: "Hi there, I'm Swapnika, Co-Founder of ...",
     phone: '+91 92896 65999',
     labels: ['Demo', 'Signup'],
     unread: 0,
