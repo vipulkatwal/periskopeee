@@ -70,9 +70,9 @@ export default function ChatConversationPage() {
   }, {} as Record<string, typeof messages>);
 
   return (
-    <div className="flex flex-col flex-1 h-full bg-[#f7f8fa]">
+    <div className="flex flex-col flex-1 h-full">
       {/* Chat Header */}
-      <div className="flex items-center justify-between px-6 py-3 border-b bg-white">
+      <div className="flex items-center justify-between px-6 py-3 border-b bg-[#f7f8fa]">
         <div className="flex items-center gap-4">
           <Avatar size={40} />
           <div>
@@ -89,7 +89,7 @@ export default function ChatConversationPage() {
         </div>
       </div>
       {/* Message List */}
-      <div className="flex-1 overflow-y-auto px-8 py-6 bg-[url('/chat-bg.png')] bg-repeat bg-[length:400px_400px]">
+      <div className="flex-1 overflow-y-auto px-8 py-6 bg-[url('/doodle.jpg')] bg-repeat bg-[length:400px_400px]">
         {Object.entries(grouped).map(([date, msgs]) => (
           <div key={date}>
             <div className="flex justify-center my-4">
@@ -107,7 +107,7 @@ export default function ChatConversationPage() {
         ))}
       </div>
       {/* Message Input */}
-      <div className="p-4 border-t bg-white flex items-center gap-2">
+      <div className="p-4 border-t flex items-center gap-2 bg-[#f7f8fa]">
         <button className="text-gray-400 hover:text-green-600"><FiSmile size={22} /></button>
         <button className="text-gray-400 hover:text-green-600"><FiPaperclip size={22} /></button>
         <input

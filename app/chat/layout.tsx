@@ -35,7 +35,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
         </div>
       </aside>
       {/* Main chat area */}
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col bg-[url('/doodle.jpg')] bg-repeat bg-[length:400px_400px]">
         <AuthGate>{children}</AuthGate>
       </main>
     </div>
