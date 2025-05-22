@@ -1,12 +1,16 @@
 "use client";
 
-import { Contact, Message } from "@/utils/chatService";
-import { ChatHeader } from "./ChatHeader";
+import { Contact, Message } from "@/components/utils/chatService";
+import { ChatHeader } from "@/components/ui/ChatHeader";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { EmptyChat } from "./EmptyChat";
 import { RefObject, useState } from "react";
 
+/**
+ * Props for the ChatArea component
+ * Main container for chat functionality including messages, input and header
+ */
 interface ChatAreaProps {
   selectedContact: Contact | null;
   messages: Message[];
@@ -34,6 +38,7 @@ export const ChatArea = ({
   messagesEndRef,
   onMessagesViewed
 }: ChatAreaProps) => {
+  // Track if chat is scrolled to bottom to show/hide scroll button
   const [isAtBottom, setIsAtBottom] = useState(true);
 
   // Function to scroll to the bottom of the chat
@@ -52,6 +57,7 @@ export const ChatArea = ({
 
       {selectedContact ? (
         <>
+          {/* Main chat message area */}
           <section className="flex-1 overflow-hidden">
             <MessageList
               messages={messages}
@@ -65,6 +71,7 @@ export const ChatArea = ({
               onScrollChange={handleScrollChange}
             />
           </section>
+          {/* Message input and controls footer */}
           <footer>
             <MessageInput
               message={newMessage}

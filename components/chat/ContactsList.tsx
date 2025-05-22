@@ -1,14 +1,17 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { ContactItem } from "@/components/Contact";
-import { Contact } from "@/utils/chatService";
+import { ContactItem } from "@/components/ui/Contact";
+import { Contact } from "@/components/utils/chatService";
 import { FiSearch, FiX } from "react-icons/fi";
 import { MdOutlineFilterList } from "react-icons/md";
 import { HiFolderArrowDown } from "react-icons/hi2";
-import { NewChatIcon } from "@/utils/Icons";
+import { NewChatIcon } from "@/components/ui/Icons";
 
-// Props interface for the ContactsList component
+/**
+ * Props interface for the ContactsList component
+ * Handles contact list display, search, filtering and selection
+ */
 interface ContactsListProps {
   contacts: Contact[];
   searchQuery: string;
@@ -41,13 +44,13 @@ export const ContactsList = ({
   // State for UI controls
   const [showSearchInput, setShowSearchInput] = useState(false);
   const [filterUnread, setFilterUnread] = useState(false);
+
   // Map to store references to contact elements for scrolling
   const contactRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   const toggleSearchInput = () => {
     setShowSearchInput(!showSearchInput);
     if (showSearchInput) {
-      // Clear search when toggling off
       setSearchQuery("");
     }
   };
@@ -56,20 +59,21 @@ export const ContactsList = ({
     setFilterUnread(!filterUnread);
   };
 
-  // Handle clicking outside of a contact to deselect
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget && handleContactDeselect) {
       handleContactDeselect();
     }
   };
 
-  // Filter contacts based on filter and search criteria
+  /**
+   * Filters contacts based on:
+   * 1. Unread messages filter if active
+   * 2. Search query if search is active
+   */
   const displayedContacts = contacts.filter((contact) => {
-    // First apply unread filter if active
     const passesUnreadFilter =
       !filterUnread || (contact.unreadCount && contact.unreadCount > 0);
 
-    // Then apply search filter if search is active
     const passesSearchFilter =
       !showSearchInput ||
       !searchQuery.trim() ||
@@ -78,12 +82,14 @@ export const ContactsList = ({
     return passesUnreadFilter && passesSearchFilter;
   });
 
-  // Auto-scroll to selected contact when it changes
+  /**
+   * Auto-scrolls to selected contact when selection changes
+   * Uses a small delay to ensure UI is updated first
+   */
   useEffect(() => {
     if (selectedContact && contactRefs.current.has(selectedContact.id)) {
       const contactElement = contactRefs.current.get(selectedContact.id);
       if (contactElement) {
-        // Add a small delay to ensure the UI is updated
         setTimeout(() => {
           contactElement.scrollIntoView({
             behavior: "smooth",
@@ -97,14 +103,12 @@ export const ContactsList = ({
   // Debounce search input to prevent excessive filtering
   useEffect(() => {
     const debounceTimeout = setTimeout(() => {
-      // We only filter contacts locally now, no API calls needed
-      // if search is needed in the future, it can be re-enabled here
-    }, 500); // 500ms delay for UI updates
+      // Local filtering only, API search disabled
+    }, 500);
 
     return () => clearTimeout(debounceTimeout);
   }, [searchQuery, showSearchInput]);
 
-  // Function to cancel search and reset search state
   const cancelSearch = () => {
     setSearchQuery("");
     setShowSearchInput(false);
@@ -203,7 +207,6 @@ export const ContactsList = ({
               className="absolute left-2.5 top-2 text-gray-400 transition-colors duration-200 ease-in-out group-hover:text-gray-600"
               size={15}
             />
-            {/* Clear/close search button */}
             {searchQuery.trim() ? (
               <button
                 className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 transition-colors duration-200 ease-in-out"
@@ -225,14 +228,14 @@ export const ContactsList = ({
         </div>
       )}
 
-      {/* Main scrollable contact list */}
+      {/* Main scrollable contact list container */}
       <div
         className="flex-1 overflow-y-auto"
         style={{ overflowY: "auto", overscrollBehavior: "contain" }}
         onClick={handleBackgroundClick}
       >
         {permissionError ? (
-          // Show error state if permissions check failed
+          // Error state when permissions check fails
           <div className="p-4 text-center">
             <p className="text-red-500 mb-2 text-xs">
               Failed to load contacts. Permission denied.
@@ -245,7 +248,7 @@ export const ContactsList = ({
             </button>
           </div>
         ) : displayedContacts.length > 0 ? (
-          // Render filtered contact list
+          // Render filtered contact list with scroll tracking refs
           displayedContacts.map((contact) => (
             <div
               key={contact.id}
@@ -270,7 +273,7 @@ export const ContactsList = ({
             </div>
           ))
         ) : (
-          // Show appropriate empty state message
+          // Empty state messages based on current filter/search state
           <div className="p-4 text-center text-gray-500 text-xs sm:text-sm">
             {filterUnread
               ? "No unread messages."
@@ -281,7 +284,7 @@ export const ContactsList = ({
         )}
       </div>
 
-      {/* Floating new chat button */}
+      {/* Floating action button for new chat */}
       <div className="absolute bottom-4 right-4 z-10">
         <button className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 hover:shadow-xl hover:scale-110 transition-all duration-300 ease-in-out transform-gpu">
           <NewChatIcon className="h-6 w-6 text-white" />

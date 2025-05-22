@@ -1,8 +1,8 @@
 "use client";
 
-import { useAuth } from "@/utils/AuthProvider";
+import { useAuth } from "@/components/AuthProvider";
 import { useEffect, useRef, useState } from "react";
-import { ChatService, Contact as ContactType, Message as MessageType } from "@/utils/chatService";
+import { ChatService, Contact as ContactType, Message as MessageType } from "@/components/utils/chatService";
 import Rightbar from "@/components/ui/Rightbar";
 import { ContactsList } from "@/components/chat/ContactsList";
 import { ChatArea } from "@/components/chat/ChatArea";
@@ -50,6 +50,7 @@ const ChatsPage: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatService = useRef(new ChatService()).current;
 
+  // Hide contacts list on mobile when a contact is selected
   useEffect(() => {
     if (selectedContact && window.innerWidth < 768) {
       setShowContactsOnMobile(false);
@@ -78,6 +79,7 @@ const ChatsPage: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [selectedContact]);
 
+  // Load contacts when user is authenticated
   useEffect(() => {
     if (user?.id) {
       loadContacts();
@@ -113,6 +115,7 @@ const ChatsPage: React.FC = () => {
     };
   }, [user?.id, selectedContact]);
 
+  // Load messages when a contact is selected
   useEffect(() => {
     if (user?.id && selectedContact) {
       loadMessages(selectedContact.id);
@@ -165,6 +168,7 @@ const ChatsPage: React.FC = () => {
     }
   };
 
+  // Load chat messages for selected contact
   const loadMessages = async (contactId: string) => {
     if (!user?.id) return;
 
@@ -179,6 +183,7 @@ const ChatsPage: React.FC = () => {
     }
   };
 
+  // Send a new message to selected contact
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedContact || !user?.id) return;
 
@@ -205,6 +210,7 @@ const ChatsPage: React.FC = () => {
           };
           setSelectedContact(updatedContact);
 
+          // Update contacts list with new message
           setContacts(prevContacts => {
             const filteredContacts = prevContacts.filter(c => c.id !== selectedContact.id);
             const updatedContacts = [updatedContact, ...filteredContacts];
@@ -221,6 +227,7 @@ const ChatsPage: React.FC = () => {
     }
   };
 
+  // Handle contact selection and mobile view
   const handleContactSelect = (contact: ContactType) => {
     setSelectedContact(contact);
     if (window.innerWidth < 768) {
@@ -236,6 +243,7 @@ const ChatsPage: React.FC = () => {
     setShowContactsOnMobile(true);
   };
 
+  // Search for users to add as contacts
   const handleSearchUsers = async () => {
     if (!searchQuery.trim() || !user?.id) return;
 
@@ -251,6 +259,7 @@ const ChatsPage: React.FC = () => {
     }
   };
 
+  // Add a new contact
   const handleAddContact = async (contactId: string) => {
     if (!user?.id) return;
 
@@ -267,6 +276,7 @@ const ChatsPage: React.FC = () => {
     }
   };
 
+  // Mark messages as read when viewed
   const handleMessagesViewed = async (messageIds: string[]) => {
     if (!user?.id || !selectedContact || messageIds.length === 0) return;
 

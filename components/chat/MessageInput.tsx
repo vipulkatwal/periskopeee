@@ -13,6 +13,10 @@ import { AiOutlineHistory } from "react-icons/ai";
 import { LuChevronsUpDown } from "react-icons/lu";
 import Image from "next/image";
 
+/**
+ * Props for the MessageInput component
+ * Handles message input, sending, and various chat actions
+ */
 interface MessageInputProps {
   message: string;
   setMessage: (message: string) => void;
@@ -58,7 +62,9 @@ export const MessageInput = ({
         </div>
       )}
 
+      {/* Main message input container */}
       <div className="border-t border-gray-200 py-2.5">
+        {/* Message input form */}
         <form onSubmit={handleSubmit} className="flex items-center px-2 sm:px-4 mx-auto">
           <input
             type="text"
@@ -80,6 +86,7 @@ export const MessageInput = ({
 
         {/* Message actions toolbar */}
         <nav className="flex items-center justify-between px-2 sm:px-4 mt-2 ml-3.5 sm:mt-3 mx-auto">
+          {/* Quick action buttons */}
           <ul className="flex space-x-4 sm:space-x-7 overflow-x-auto pb-1 scrollbar-hide">
             <li>
               <button className="focus:outline-none flex-shrink-0 cursor-pointer" aria-label="Attach file">
@@ -118,7 +125,7 @@ export const MessageInput = ({
             </li>
           </ul>
 
-          {/* User profile button */}
+          {/* User profile button with avatar/name */}
           <button className="flex items-center px-1 py-0.5 ml-2 text-black text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition whitespace-nowrap cursor-pointer" aria-label="User profile">
             {userAvatar ? (
               <Image

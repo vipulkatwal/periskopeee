@@ -1,6 +1,6 @@
 import { Database } from '@/types/supabase';
 import { createBrowserSupabaseClient } from './supabase-client';
-import { UserSentState } from '@/components/Contact';
+import { UserSentState } from '@/components/ui/Contact';
 
 /**
  * Utility function to format dates into relative strings like "Today" or "Yesterday"

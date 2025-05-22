@@ -1,8 +1,8 @@
 "use client";
 
-import { Message as MessageType } from "@/utils/chatService";
-import { Message } from "@/components/Message";
-import { UserSentState } from "@/components/Contact";
+import { Message as MessageType } from "@/components/utils/chatService";
+import { Message } from "@/components/ui/Message";
+import { UserSentState } from "@/components/ui/Contact";
 import { RefObject, useEffect, useRef, useState } from "react";
 
 interface MessageListProps {
