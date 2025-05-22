@@ -10,7 +10,7 @@ import { IoMdNotificationsOff } from "react-icons/io";
 import { BsStars } from "react-icons/bs";
 import { CiBoxList } from "react-icons/ci";
 
-const Navbar = () => {
+const Topbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -62,4 +62,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Topbar;

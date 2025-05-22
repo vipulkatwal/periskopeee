@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import '../styles/globals.css';
 import Sidebar from "@/components/sidebar/Sidebar";
-import Navbar from "@/components/Navbar";
+import Topbar from "@/components/Topbar";
 import { AuthProvider } from "@/components/utils/AuthProvider";
-import AuthGate from "@/components/utils/AuthGate";
+import AuthGate from "@/components/AuthGate";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +37,7 @@ export default function RootLayout({
               <Sidebar />
 
               <div className="flex flex-col flex-1 overflow-hidden">
-                <Navbar />
+                <Topbar />
                 <div className="flex-1 overflow-auto bg-white">{children}</div>
               </div>
             </div>

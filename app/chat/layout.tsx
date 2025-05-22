@@ -1,5 +1,5 @@
 import Sidebar from '@/components/sidebar/Sidebar';
-import AuthGate from '@/components/utils/AuthGate';
+import AuthGate from '@/components/AuthGate';
 import ChatList from '@/components/chat/ChatList';
 import LabelList from '@/components/sidebar/LabelList';
 import MemberAssign from '@/components/sidebar/MemberAssign';
