@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { AnalyticsIcon, BroadcastIcon, PeriskopeIcon } from "./Icons";
+import { AnalyticsIcon, BroadcastIcon, CollapseIcon, PeriskopeIcon, RulesIcon} from "@/components/ui/Icons";
 import { IconType } from "react-icons";
 import { IoChatbubbleEllipses, IoTicket } from "react-icons/io5";
 import { FaListUl } from "react-icons/fa";
@@ -9,66 +9,78 @@ import { MdChecklist } from "react-icons/md";
 import { BsGearFill } from "react-icons/bs";
 import { TbStarsFilled } from "react-icons/tb";
 import { AiFillHome } from "react-icons/ai";
-import { LogOut, Wand2 } from "lucide-react";
+import SidebarNavLink from "./SidebarNavLink";
+import { usePathname } from "next/navigation";
 
 interface MenuItem {
   href?: string;
-  icon?: IconType | React.ComponentType<{ size?: number }>;
+  icon?: IconType;
   divider?: boolean;
   isNew?: boolean;
   isImplemented?: boolean;
 }
 
 const Sidebar: React.FC = () => {
-  // WhatsApp-style icon order and types
+  const pathname = usePathname();
+
+  // Define menu items with their routes, icons and implementation status
   const menuItems: MenuItem[] = [
-    { href: "/dashboard", icon: AiFillHome },
-    { href: "/chats", icon: IoChatbubbleEllipses },
-    { href: "/tickets", icon: IoTicket },
-    { href: "/analytics", icon: AnalyticsIcon },
-    { href: "/list", icon: FaListUl },
-    { href: "/broadcast", icon: BroadcastIcon },
-    { href: "/rules", icon: Wand2 }, // Sparkles/magic wand
-    { href: "/contacts", icon: RiContactsBookFill },
-    { href: "/media", icon: RiFolderImageFill },
-    { href: "/logs", icon: MdChecklist },
-    { href: "/settings", icon: BsGearFill },
+    // Dashboard section
+    { href: "/dashboard", icon: AiFillHome, isImplemented: false },
+    { divider: true },
+    // Communication section
+    { href: "/chats", icon: IoChatbubbleEllipses, isImplemented: true },
+    { href: "/tickets", icon: IoTicket, isImplemented: false },
+    { href: "/analytics", icon: AnalyticsIcon, isImplemented: false },
+    { divider: true },
+    // Content management section
+    { href: "/list", icon: FaListUl, isImplemented: false },
+    { href: "/broadcast", icon: BroadcastIcon, isImplemented: false },
+    { href: "/rules", icon: RulesIcon, isNew: true, isImplemented: false },
+    { divider: true },
+    // Resource section
+    { href: "/contacts", icon: RiContactsBookFill, isImplemented: false },
+    { href: "/media", icon: RiFolderImageFill, isImplemented: false },
+    { divider: true },
+    // System section
+    { href: "/logs", icon: MdChecklist, isImplemented: false },
+    { href: "/settings", icon: BsGearFill, isImplemented: false },
   ];
 
   return (
-    <div className="h-screen w-14 flex flex-col justify-between bg-white shadow-md">
-      <div className="flex flex-col gap-y-1 pt-3">
-        <div className="flex justify-center items-center mb-2">
-          <PeriskopeIcon className="h-9 w-9" />
+    <div className="h-screen w-14 p-1 flex flex-col justify-between border-r border-gray-200">
+      {/* Top section with logo and navigation items */}
+      <div className="flex flex-col gap-y-1 p-1">
+        <div className="flex justify-center items-center p-2">
+          <PeriskopeIcon className="h-10 w-10" />
         </div>
-        <div className="flex flex-col items-center gap-1">
-          {menuItems.map((item, index) =>
-            item.divider ? (
-              <hr key={`divider-${index}`} className="border-gray-200 m-1" />
-            ) : (
-              item.href && item.icon && (
-                <SidebarIcon key={item.href} icon={item.icon} />
-              )
+        {menuItems.map((item, index) =>
+          item.divider ? (
+            <hr key={`divider-${index}`} className="border-gray-200 m-1" />
+          ) : (
+            item.href && item.icon && (
+              <SidebarNavLink
+                key={item.href}
+                href={item.href}
+                icon={item.icon}
+                isNew={item.isNew}
+                isImplemented={item.isImplemented}
+              />
             )
-          )}
-        </div>
+          )
+        )}
       </div>
-      <div className="flex flex-col items-center gap-1 mb-2">
-        <SidebarIcon icon={TbStarsFilled} />
-        <SidebarIcon icon={LogOut} extraClass="mb-1" />
+      {/* Bottom section with additional controls */}
+      <div className="flex flex-col gap-y-1 p-1">
+        <div className="flex items-center justify-center px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-gray-600">
+          <TbStarsFilled className="h-5 w-5" />
+        </div>
+        <div className="flex items-center justify-center px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-gray-600">
+          <CollapseIcon className="h-5 w-5 rotate-180" />
+        </div>
       </div>
     </div>
   );
 };
-
-function SidebarIcon({ icon: Icon, extraClass = "" }: { icon: React.ComponentType<{ size?: number }>, extraClass?: string }) {
-  return (
-    <div
-      className={`flex items-center justify-center w-10 h-10 rounded-full cursor-pointer text-[#3a3d42] transition-colors duration-200 hover:bg-gray-100 hover:text-green-500 ${extraClass}`}
-    >
-      <Icon size={20} />
-    </div>
-  );
-}
 
 export default Sidebar;

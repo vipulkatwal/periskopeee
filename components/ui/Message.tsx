@@ -1,6 +1,6 @@
 "use client";
 
-import { UserSentState } from "@/components/ui/Contact";
+import { UserSentState } from "@components/ui/Contact";
 import { BiCheckDouble } from "react-icons/bi";
 import { MdCheck } from "react-icons/md";
 
