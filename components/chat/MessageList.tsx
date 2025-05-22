@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/components/utils/supabase-server';
 import ChatBubble from '../ui/ChatBubble';
 import { useAuth } from '../utils/AuthProvider';
 

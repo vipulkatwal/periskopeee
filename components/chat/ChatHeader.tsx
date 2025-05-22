@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/components/utils/supabase-server';
 import { FiUsers, FiTag, FiMoreVertical } from 'react-icons/fi';
 import Avatar from '../ui/Avatar';
 

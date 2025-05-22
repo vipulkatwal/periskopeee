@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/components/utils/supabase-server';
 import { FiRefreshCw } from 'react-icons/fi';
 
 /**
