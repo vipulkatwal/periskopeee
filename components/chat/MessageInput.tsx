@@ -1,60 +1,78 @@
-import { useState } from 'react';
-import { supabase } from '@/components/utils/supabase-server';
-import { useAuth } from '../utils/AuthProvider';
-import { FiSend } from 'react-icons/fi';
+import { useState } from "react";
+import { FaSmile, FaPaperclip, FaCamera, FaMicrophone, FaFile, FaChevronDown, FaPaperPlane } from "react-icons/fa";
 
-/**
- * Props for MessageInput: receives the chatId to send messages to.
- */
-interface MessageInputProps {
-  chatId: string;
-}
+const senders = [
+  { name: "Periskope", icon: <FaSmile className="text-green-600" /> },
+  // Add more senders if needed
+];
 
-/**
- * MessageInput provides a text box and send button for sending messages.
- * Saves the message to Supabase and clears the input.
- */
-export default function MessageInput({ chatId }: MessageInputProps) {
-  const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
-
-  // Handle sending a message
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!content.trim() || !user) return;
-    setLoading(true);
-
-    // Insert the new message into Supabase
-    await supabase.from('messages').insert({
-      chat_id: chatId,
-      sender_id: user.id,
-      content,
-      created_at: new Date().toISOString(),
-    });
-
-    setContent('');
-    setLoading(false);
-  };
+export default function MessageInput() {
+  const [message, setMessage] = useState("");
+  const [selectedSender, setSelectedSender] = useState(senders[0]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <form onSubmit={handleSend} className="flex items-center gap-2">
-      <input
-        type="text"
-        placeholder="Type a message"
-        value={content}
-        onChange={e => setContent(e.target.value)}
-        className="flex-1 px-4 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-200"
-        disabled={loading}
-      />
-      <button
-        type="submit"
-        className="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 transition disabled:opacity-50"
-        disabled={loading || !content.trim()}
-        title="Send"
-      >
-        <FiSend size={20} />
+    <div className="w-full px-4 py-3 bg-white border-t border-gray-200 flex items-end gap-2">
+      {/* Left: big green circle with icon */}
+      <button className="w-10 h-10 flex items-center justify-center rounded-full bg-green-600 text-white text-xl mr-2">
+        <FaSmile />
       </button>
-    </form>
+      {/* Input and icons */}
+      <div className="flex-1 flex flex-col">
+        <div className="flex items-center bg-[#f7f8fa] rounded-2xl px-4 py-2 border border-gray-200">
+          <input
+            className="flex-1 bg-transparent outline-none text-base placeholder-gray-400"
+            type="text"
+            placeholder="Message..."
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+          />
+          <button className="mx-1 text-gray-500 hover:text-green-600">
+            <FaPaperclip size={18} />
+          </button>
+          <button className="mx-1 text-gray-500 hover:text-green-600">
+            <FaCamera size={18} />
+          </button>
+          <button className="mx-1 text-gray-500 hover:text-green-600">
+            <FaFile size={18} />
+          </button>
+          <button className="mx-1 text-gray-500 hover:text-green-600">
+            <FaMicrophone size={18} />
+          </button>
+        </div>
+      </div>
+      {/* Send button */}
+      <button className="w-10 h-10 flex items-center justify-center rounded-full bg-green-600 text-white text-xl ml-2">
+        <FaPaperPlane />
+      </button>
+      {/* Sender dropdown */}
+      <div className="relative ml-2">
+        <button
+          className="flex items-center gap-2 px-3 py-1 rounded-xl border border-gray-200 bg-[#f7f8fa] text-sm font-medium text-gray-700 hover:bg-gray-100"
+          onClick={() => setShowDropdown(v => !v)}
+        >
+          {selectedSender.icon}
+          {selectedSender.name}
+          <FaChevronDown className="ml-1" />
+        </button>
+        {showDropdown && (
+          <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-xl shadow-lg z-10">
+            {senders.map((sender, idx) => (
+              <button
+                key={idx}
+                className="w-full flex items-center gap-2 px-4 py-2 text-left hover:bg-gray-100"
+                onClick={() => {
+                  setSelectedSender(sender);
+                  setShowDropdown(false);
+                }}
+              >
+                {sender.icon}
+                {sender.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
