@@ -6,7 +6,7 @@ import { BsEmojiSmile } from "react-icons/bs";
 import {
   GenerateOutlineIcon,
   TextFileIcon,
-} from "@/components/Icons";
+} from "@/components/ui/Icons";
 import { FiPaperclip } from "react-icons/fi";
 import { FaMicrophone, FaRegClock } from "react-icons/fa6";
 import { AiOutlineHistory } from "react-icons/ai";

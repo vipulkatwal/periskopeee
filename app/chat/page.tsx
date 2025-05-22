@@ -3,7 +3,7 @@
 import { useAuth } from "@/utils/AuthProvider";
 import { useEffect, useRef, useState } from "react";
 import { ChatService, Contact as ContactType, Message as MessageType } from "@/utils/chatService";
-import Rightbar from "@/components/Rightbar";
+import Rightbar from "@/components/ui/Rightbar";
 import { ContactsList } from "@/components/chat/ContactsList";
 import { ChatArea } from "@/components/chat/ChatArea";
 import { FiArrowLeft } from "react-icons/fi";

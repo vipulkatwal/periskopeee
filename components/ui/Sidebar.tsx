@@ -1,6 +1,6 @@
 'use client';
 
-import { AnalyticsIcon, BroadcastIcon, PeriskopeIcon } from "../Icons";
+import { AnalyticsIcon, BroadcastIcon, PeriskopeIcon } from "./Icons";
 import { IconType } from "react-icons";
 import { IoChatbubbleEllipses, IoTicket } from "react-icons/io5";
 import { FaListUl } from "react-icons/fa";

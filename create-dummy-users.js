@@ -3,12 +3,14 @@ import { createClient } from "@supabase/supabase-js";
 
 dotenv.config();
 
+// Initialize Supabase client with admin privileges
 const supabaseAdmin = createClient(
 	process.env.SUPABASE_URL,
 	process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 async function createConfirmedDummyUsers() {
+	// Array of dummy users with data
 	const dummyUsers = [
 		{
 			email: "lily_evans@example.com",
@@ -136,6 +138,7 @@ async function createConfirmedDummyUsers() {
 
 	for (const user of dummyUsers) {
 		try {
+			// Create user with email confirmation bypassed
 			const { data, error } = await supabaseAdmin.auth.admin.createUser({
 				email: user.email,
 				password: user.password,
@@ -153,6 +156,7 @@ async function createConfirmedDummyUsers() {
 		} catch (e) {
 			console.error(`Exception while creating user ${user.email}:`, e);
 		}
+		// Add delay between user creations to prevent rate limiting
 		await new Promise((resolve) => setTimeout(resolve, 500));
 	}
 

@@ -1,45 +1,35 @@
-// Formats a date string or Date object to 'DD-MM-YYYY'
-export function formatDate(date: string | Date): string {
-  const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year = d.getFullYear();
-  return `${day}-${month}-${year}`;
-}
+// Formats a date string to display 'Today', 'Yesterday', or the localized date
+export const formatMessageDate = (dateString: string): string => {
+  if (!dateString) return '';
 
-// Checks if the given date is today
-export function isToday(date: string | Date): boolean {
-  const d = new Date(date);
-  const now = new Date();
-  return d.getDate() === now.getDate() &&
-    d.getMonth() === now.getMonth() &&
-    d.getFullYear() === now.getFullYear();
-}
+  const date = new Date(dateString);
+  const today = new Date();
 
-// Checks if the given date is yesterday
-export function isYesterday(date: string | Date): boolean {
-  const d = new Date(date);
-  const now = new Date();
-  const yesterday = new Date(now);
-  yesterday.setDate(now.getDate() - 1);
-  return d.getDate() === yesterday.getDate() &&
-    d.getMonth() === yesterday.getMonth() &&
-    d.getFullYear() === yesterday.getFullYear();
-}
+  // Check if date is today
+  if (date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()) {
+    return 'Today';
+  }
 
-// Checks if two dates are on the same day
-export function isSameDay(date1: string | Date, date2: string | Date): boolean {
-  const d1 = new Date(date1);
-  const d2 = new Date(date2);
-  return d1.getDate() === d2.getDate() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getFullYear() === d2.getFullYear();
-}
+  // Check if date is yesterday
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (date.getDate() === yesterday.getDate() &&
+      date.getMonth() === yesterday.getMonth() &&
+      date.getFullYear() === yesterday.getFullYear()) {
+    return 'Yesterday';
+  }
 
-// Returns the time in 'HH:mm' format
-export function getTime(date: string | Date): string {
-  const d = new Date(date);
-  const hours = String(d.getHours()).padStart(2, '0');
-  const minutes = String(d.getMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
+  return date.toLocaleDateString();
+};
+
+// Formats a date string to display time in HH:MM format
+export const formatTime = (dateString: string): string => {
+  if (!dateString) return '';
+
+  return new Date(dateString).toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};

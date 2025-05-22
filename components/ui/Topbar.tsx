@@ -10,7 +10,9 @@ import { IoMdNotificationsOff } from "react-icons/io";
 import { BsStars } from "react-icons/bs";
 import { CiBoxList } from "react-icons/ci";
 
+// Top navigation bar component with responsive design
 const Topbar = () => {
+  // State for mobile menu toggle
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -21,7 +23,7 @@ const Topbar = () => {
         <span className="text-gray-400 font-bold">chats</span>
       </div>
 
-      {/* Mobile Menu Button (Hidden on Desktop) */}
+      {/* Mobile Menu Toggle - Only visible on mobile devices */}
       <button
         className="md:hidden p-2 rounded-md text-black hover:bg-gray-100 transition"
         onClick={() => setIsOpen(!isOpen)}
@@ -29,35 +31,35 @@ const Topbar = () => {
         {isOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
       </button>
 
-      {/* Right Section - Utility Buttons (Visible on Desktop) */}
+      {/* Desktop Navigation Buttons - Hidden on mobile */}
       <div className="hidden md:flex items-center space-x-2 flex-nowrap overflow-x-auto pr-1">
+        {/* Refresh Button */}
         <button className="flex items-center px-2.5 py-1 text-black text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition whitespace-nowrap cursor-pointer">
           <TbRefreshDot className="h-4 w-4 mr-1 text-black" /> Refresh
         </button>
+        {/* Help Button */}
         <button className="flex items-center px-2.5 py-1 text-black text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition whitespace-nowrap cursor-pointer">
           <LuCircleHelp className="h-4 w-4 mr-1" /> Help
         </button>
+        {/* Phone Status Indicator with Counter */}
         <div className="flex items-center px-2.5 py-1 text-black text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition whitespace-nowrap cursor-pointer">
           <span className="h-2 w-2 bg-yellow-400 rounded-full mr-2"></span>
           5 / 6 phones
           <LuChevronsUpDown className="ml-1 h-3 w-3"/>
         </div>
+        {/* Install Desktop Button */}
         <div className="flex items-center px-3 py-1.5 text-black text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition whitespace-nowrap cursor-pointer">
-
-        <MdOutlineInstallDesktop className="h-4 w-4" />
+          <MdOutlineInstallDesktop className="h-4 w-4" />
         </div>
+        {/* Notifications Toggle */}
         <div className="flex items-center px-3 py-1.5 text-black text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition whitespace-nowrap cursor-pointer">
-
-         < IoMdNotificationsOff className="h-4 w-4" />
-         </div>
-         <div className="flex items-center px-3 py-1.5 text-black text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition whitespace-nowrap cursor-pointer">
-
-         < BsStars className="h-4 w-4 p-0.5 text-yellow-500 "/><CiBoxList className="h-4 w-4"/>
-         </div>
-
+          <IoMdNotificationsOff className="h-4 w-4" />
+        </div>
+        {/* Features Menu */}
+        <div className="flex items-center px-3 py-1.5 text-black text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition whitespace-nowrap cursor-pointer">
+          <BsStars className="h-4 w-4 p-0.5 text-yellow-500 "/><CiBoxList className="h-4 w-4"/>
+        </div>
       </div>
-
-
     </nav>
   );
 };

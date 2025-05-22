@@ -17,6 +17,10 @@ interface MessageListProps {
   onScrollChange?: (isAtBottom: boolean) => void;
 }
 
+/**
+ * Formats a date string into a human readable format
+ * Returns 'Today', 'Yesterday', or the localized date string
+ */
 const formatMessageDate = (dateString: string): string => {
   if (!dateString) return '';
 
@@ -40,6 +44,9 @@ const formatMessageDate = (dateString: string): string => {
   return date.toLocaleDateString();
 };
 
+/**
+ * Checks if two dates are on the same calendar day
+ */
 const isSameDay = (date1: string, date2: string): boolean => {
   if (!date1 || !date2) return false;
 
@@ -64,6 +71,7 @@ export const MessageList = ({
   onMessagesViewed,
   onScrollChange
 }: MessageListProps) => {
+  // Track which messages have been viewed
   const [viewedMessages, setViewedMessages] = useState<Set<string>>(new Set());
   const [isAtBottom, setIsAtBottom] = useState(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -85,6 +93,7 @@ export const MessageList = ({
     }
   };
 
+  // Set up intersection observer to track message visibility
   useEffect(() => {
     if (!userId || !onMessagesViewed) return;
 
@@ -130,10 +139,10 @@ export const MessageList = ({
     };
   }, [userId, onMessagesViewed, messages, viewedMessages]);
 
-  // Simple scroll to bottom whenever messages change
+  // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
-    setIsAtBottom(true); // Reset to true when messages update
+    setIsAtBottom(true);
   }, [messages, messagesEndRef]);
 
   // Add scroll event listener
@@ -169,7 +178,7 @@ export const MessageList = ({
             // Determine if this is the first message in a group from the same sender
             const isFirstInGroup = index === 0 ||
               messages[index - 1].sender_id !== msg.sender_id ||
-              showDate; // If the date changes, we should also show the header
+              showDate;
 
             return (
               <article
@@ -192,7 +201,7 @@ export const MessageList = ({
                 <Message
                   text={msg.content}
                   time={new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  date={undefined} // Since we're now handling dates in the article header
+                  date={undefined}
                   isSent={msg.sender_id === userId}
                   userSentState={
                     msg.sender_id === userId
