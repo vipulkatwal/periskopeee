@@ -14,7 +14,8 @@ export async function middleware(req: NextRequest) {
   // Auth condition
   const isAuth = !!session;
   const isAuthPage = req.nextUrl.pathname.startsWith('/login') ||
-                    req.nextUrl.pathname.startsWith('/signup');
+                    req.nextUrl.pathname.startsWith('/signup') ||
+                    req.nextUrl.pathname.startsWith('/register');
 
   if (isAuthPage) {
     if (isAuth) {

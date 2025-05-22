@@ -1,57 +1,115 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
-import { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
+import { createContext, useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createBrowserSupabaseClient } from "./supabase-client";
+import type { User } from "@supabase/supabase-js";
+import type { Database } from "@/types/supabase";
 
-// Define the shape of our Auth context
-interface AuthContextType {
+type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+
+type AuthContextType = {
   user: User | null;
+  profile: Profile | null;
   loading: boolean;
-}
+  signOut: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
+};
 
-// Create a context to hold authentication state
-const AuthContext = createContext<AuthContextType>({ user: null, loading: true });
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-/**
- * AuthProvider wraps your app and provides user session state.
- * It listens for Supabase auth changes and updates the user accordingly.
- */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const supabase = createBrowserSupabaseClient();
+
+  const refreshProfile = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching profile:", error);
+        return;
+      }
+
+      setProfile(data);
+    } catch (error) {
+      console.error("Error refreshing profile:", error);
+    }
+  };
 
   useEffect(() => {
-    // Get initial user session from Supabase
-    supabase.auth.getUser().then(({ data }: { data: { user: User | null } }) => {
-      setUser(data.user);
-      setLoading(false);
-    });
+    const getUser = async () => {
+      setLoading(true);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
 
-    // Listen for auth state changes (login, logout, etc.)
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event: AuthChangeEvent, session: Session | null) => {
-        setUser(session?.user ?? null);
+        if (session?.user) {
+          setUser(session.user);
+
+          // Fetch user profile
+          const { data: profileData } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+
+          setProfile(profileData);
+        }
+      } catch (error) {
+        console.error("Error getting session:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUser();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          setUser(session.user);
+          await refreshProfile();
+        } else {
+          setUser(null);
+          setProfile(null);
+        }
+
+        // Force a refresh of all Server Components
+        router.refresh();
       }
     );
 
-    // Cleanup subscription on unmount
     return () => {
-      listener.subscription.unsubscribe();
+      subscription.unsubscribe();
     };
-  }, []);
+  }, [supabase, router]);
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/auth/signin");
+  };
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, profile, loading, signOut, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-/**
- * Custom hook to access the auth context.
- * Usage: const { user, loading } = useAuth();
- */
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }
