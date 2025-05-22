@@ -11,11 +11,16 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
+  // Redirect /auth/signup to /auth/register
+  if (req.nextUrl.pathname === '/auth/signup') {
+    return NextResponse.redirect(new URL('/auth/register', req.url));
+  }
+
   // Auth condition
   const isAuth = !!session;
-  const isAuthPage = req.nextUrl.pathname.startsWith('/login') ||
-                    req.nextUrl.pathname.startsWith('/signup') ||
-                    req.nextUrl.pathname.startsWith('/register');
+  const isAuthPage = req.nextUrl.pathname.startsWith('/auth/login') ||
+                    req.nextUrl.pathname.startsWith('/auth/signup') ||
+                    req.nextUrl.pathname.startsWith('/auth/register');
 
   if (isAuthPage) {
     if (isAuth) {
@@ -28,7 +33,7 @@ export async function middleware(req: NextRequest) {
 
   if (!isAuth) {
     // If user is not signed in and tries to access protected pages, redirect to login
-    const redirectUrl = new URL('/login', req.url);
+    const redirectUrl = new URL('/auth/login', req.url);
     redirectUrl.searchParams.set('redirectedFrom', req.nextUrl.pathname);
     return NextResponse.redirect(redirectUrl);
   }
