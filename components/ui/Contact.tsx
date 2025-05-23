@@ -23,7 +23,6 @@ interface ContactItemProps {
   tags?: string[];
   date: string;
   avatar?: string;
-  isMuted?: boolean;
   userSentState?: UserSentState;
   isActive?: boolean;
 }
@@ -36,7 +35,6 @@ export const ContactItem: React.FC<ContactItemProps> = ({
   tags = ["Demo", "Dont Send"],
   date,
   avatar,
-  isMuted = false,
   userSentState,
   isActive = false,
 }) => {

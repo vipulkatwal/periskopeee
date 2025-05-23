@@ -33,8 +33,8 @@ export const SigninForm = () => {
 
       router.push("/");
       router.refresh();
-    } catch (error: any) {
-      setError(error.message || "An error occurred during sign in");
+    } catch (error: unknown) {
+      setError(typeof error === 'object' && error !== null && 'message' in error && typeof (error as { message: string }).message === 'string' ? (error as { message: string }).message : "An error occurred during sign in");
     } finally {
       setLoading(false);
     }
@@ -115,7 +115,7 @@ export const SigninForm = () => {
 
       <div className="text-center pt-4">
         <p className="text-sm text-gray-600">
-          Don’t have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/auth/signup" className="font-medium text-green-600 hover:underline">
             Sign up
           </Link>

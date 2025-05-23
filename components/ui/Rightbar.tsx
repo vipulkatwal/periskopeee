@@ -34,7 +34,7 @@ const menuItems: MenuItem[] = [
 ];
 
 // Right sidebar component displaying action buttons
-const Rightbar: React.FC<RightbarProps> = ({ contact }) => {
+const Rightbar: React.FC<RightbarProps> = () => {
     return (
         <aside className="w-14 border-l pt-10 border-gray-200 p-2 flex flex-col gap-4 h-full">
           {menuItems.map(

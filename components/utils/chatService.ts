@@ -1,6 +1,6 @@
-import { Database } from '@/types/supabase';
 import { createBrowserSupabaseClient } from './supabase-client';
 import { UserSentState } from '@/components/ui/Contact';
+import { RealtimeChannel } from '@supabase/supabase-js';
 
 /**
  * Utility function to format dates into relative strings like "Today" or "Yesterday"
@@ -65,7 +65,7 @@ export type Contact = {
  */
 export class ChatService {
   private supabase = createBrowserSupabaseClient();
-  private messageSubscription: any = null; // Stores active message subscription
+  private messageSubscription: RealtimeChannel | null = null; // Stores active message subscription
   private permissionIssue = false; // Tracks if user has DB permission issues
 
   /**
@@ -129,7 +129,7 @@ export class ChatService {
       }
 
       // Verify user exists in profiles table
-      const { data: profileData, error: profileError } = await this.supabase
+      const { error: profileError } = await this.supabase
         .from('profiles')
         .select('id')
         .eq('id', userId)

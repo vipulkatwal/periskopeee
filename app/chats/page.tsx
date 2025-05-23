@@ -90,7 +90,7 @@ const ChatsPage: React.FC = () => {
   useEffect(() => {
     if (!user?.id) return;
 
-    const unsubscribe = chatService.subscribeToMessages(user.id, (newMessage) => {
+    chatService.subscribeToMessages(user.id, (newMessage) => {
       if (selectedContact &&
          (newMessage.sender_id === selectedContact.id || newMessage.receiver_id === selectedContact.id)) {
         setMessages(prev => [...prev, newMessage]);
@@ -139,11 +139,11 @@ const ChatsPage: React.FC = () => {
         try {
           contactsList = await chatService.getContacts(user.id);
           break;
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.log(`Attempt ${attempts + 1} failed, retrying...`);
           attempts++;
 
-          if (error?.message?.includes('permission denied')) {
+          if (typeof error === 'object' && error !== null && 'message' in error && typeof (error as { message: string }).message === 'string' && (error as { message: string }).message.includes('permission denied')) {
             permissionIssue = true;
           }
 
@@ -158,9 +158,9 @@ const ChatsPage: React.FC = () => {
       }
 
       setContacts(contactsList);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading contacts:", error);
-      if (error?.message?.includes('permission denied')) {
+      if (typeof error === 'object' && error !== null && 'message' in error && typeof (error as { message: string }).message === 'string' && (error as { message: string }).message.includes('permission denied')) {
         setPermissionError(true);
       }
     } finally {

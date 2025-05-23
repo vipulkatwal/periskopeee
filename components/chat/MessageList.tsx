@@ -73,7 +73,6 @@ export const MessageList = ({
 }: MessageListProps) => {
   // Track which messages have been viewed
   const [viewedMessages, setViewedMessages] = useState<Set<string>>(new Set());
-  const [isAtBottom, setIsAtBottom] = useState(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const messageRefs = useRef<Map<string, HTMLElement>>(new Map());
   const containerRef = useRef<HTMLElement>(null);
@@ -85,7 +84,6 @@ export const MessageList = ({
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
     // Consider "at bottom" if within 100px of the bottom
     const isBottom = scrollHeight - scrollTop - clientHeight < 100;
-    setIsAtBottom(isBottom);
 
     // Notify parent component about scroll position
     if (onScrollChange) {
@@ -142,8 +140,10 @@ export const MessageList = ({
   // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
-    setIsAtBottom(true);
-  }, [messages, messagesEndRef]);
+    if (onScrollChange) {
+      onScrollChange(true);
+    }
+  }, [messages, messagesEndRef, onScrollChange]);
 
   // Add scroll event listener
   useEffect(() => {
