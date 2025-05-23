@@ -63,25 +63,27 @@ export const MessageInput = ({
       )}
 
       {/* Main message input container */}
-      <div className="border-t border-gray-200 py-2.5">
+      <div className="border-t border-gray-200 py-2.5 bg-transparent">
         {/* Message input form */}
         <form onSubmit={handleSubmit} className="flex items-center px-2 sm:px-4 mx-auto">
-          <input
-            type="text"
-            className="flex-1 py-2 sm:py-2.5 px-3 font-medium sm:px-4 rounded-3xl text-md h-10 focus:outline-none"
-            placeholder="Message..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            aria-label="Type a message"
-          />
-          <button
-            type="submit"
-            className="ml-2 p-1 text-green-700"
-            disabled={!message.trim()}
-            aria-label="Send message"
-          >
-            <IoSend className="h-6 w-6" />
-          </button>
+          <div className="flex flex-1 items-center bg-white border border-gray-200 rounded-xl shadow-sm px-3 sm:px-4 py-1.5 sm:py-2 transition focus-within:border-green-400">
+            <input
+              type="text"
+              className="flex-1 bg-transparent border-none outline-none text-md font-medium placeholder-gray-400"
+              placeholder="Message..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              aria-label="Type a message"
+            />
+            <button
+              type="submit"
+              className="ml-2 p-1 text-green-700"
+              disabled={!message.trim()}
+              aria-label="Send message"
+            >
+              <IoSend className="h-6 w-6" />
+            </button>
+          </div>
         </form>
 
         {/* Message actions toolbar */}
