@@ -15,7 +15,7 @@ A modern, real-time chat application built with **Next.js**, **Tailwind CSS**, *
 - 🟢 **Message Status**: Track when messages are sent, delivered, and read
 - 🖼️ **Pixel-perfect UI**: Clean, modern, and responsive design
 - 🧩 **Sidebar & Topbar**: Only visible for authenticated users
-- 🖼️ **Screenshots**: *(Add your screenshots below!)*
+
 
 ---
 
@@ -61,10 +61,18 @@ periskope/
 ---
 
 ## 📸 Screenshots
-<!-- Place your screenshots here -->
-![Sign Up](./signup.png)
-![Log In](./login.png)
-![Chat UI](./chatUI.png)
+
+- **Register Page:**
+
+![Sign Up](./screenshots/signup.png)
+
+- **Login Page:**
+
+![Log In](./screenshots/login.png)
+
+- **Chat:**
+
+![Chat UI](./screenshots/chatUI.png)
 
 ---
 
