@@ -163,7 +163,7 @@ export const MessageList = ({
       style={{
         overflowY: 'auto',
         overscrollBehavior: 'contain',
-        backgroundImage: "url('/whatsapp-bg.png')",
+        backgroundImage: "url('/doodle.png')",
         backgroundRepeat: 'repeat',
         backgroundSize: 'auto'
       }}

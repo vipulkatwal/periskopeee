@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createBrowserSupabaseClient } from "@/components/utils/supabase-client";
 import { PeriskopeIcon } from "@/components/ui/Icons";
-import { validatePhone, validateEmail, validateUsername, validatePassword, generateRandomPhone } from "@/components/utils/validationUtils";
+import {
+  validatePhone,
+  validateEmail,
+  validateUsername,
+  validatePassword,
+  generateRandomPhone,
+} from "@/components/utils/validationUtils";
 
 export const SignupForm = () => {
   const router = useRouter();
@@ -19,7 +25,6 @@ export const SignupForm = () => {
 
   const supabase = createBrowserSupabaseClient();
 
-  // Function to generate a UI Avatar URL from username
   const generateUIAvatarUrl = (username: string) => {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random`;
   };
@@ -56,9 +61,9 @@ export const SignupForm = () => {
 
     try {
       const { data: existingUsers, error: phoneCheckError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('phone', phone);
+        .from("profiles")
+        .select("id")
+        .eq("phone", phone);
 
       if (phoneCheckError) {
         console.error("Error checking phone uniqueness:", phoneCheckError);
@@ -68,7 +73,6 @@ export const SignupForm = () => {
         return;
       }
 
-      // Use UI Avatar if no avatar URL is provided
       const finalAvatarUrl = generateUIAvatarUrl(username);
 
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -87,20 +91,20 @@ export const SignupForm = () => {
 
       if (authData.user) {
         if (authData.session) {
-          setSuccess("Account created successfully! Redirecting to app...");
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          setSuccess("Account created successfully! Redirecting...");
+          await new Promise((r) => setTimeout(r, 2000));
           router.push("/");
         } else {
-          setSuccess("Account created! Please check your email for confirmation before signing in.");
-          await new Promise(resolve => setTimeout(resolve, 3000));
+          setSuccess("Account created! Please check your email to confirm.");
+          await new Promise((r) => setTimeout(r, 3000));
           router.push("/auth/signin");
         }
       }
     } catch (error: unknown) {
-      if (typeof error === 'object' && error !== null && 'message' in error) {
-        setError((error as { message?: string }).message || "An error occurred during sign up");
+      if (typeof error === "object" && error !== null && "message" in error) {
+        setError((error as { message?: string }).message || "Error signing up");
       } else {
-        setError("An error occurred during sign up");
+        setError("Error signing up");
       }
       console.error("Signup error:", error);
     } finally {
@@ -109,30 +113,19 @@ export const SignupForm = () => {
   };
 
   return (
-    <div className="w-full max-w-md p-4 sm:p-8 space-y-6 sm:space-y-8 bg-white rounded-lg shadow-md overflow-y-auto max-h-screen sm:max-h-none">
+    <div className="w-full max-w-md space-y-6 p-6 sm:p-8 bg-white rounded-2xl shadow-lg">
       <div className="text-center">
-        <div className="flex justify-center mb-4">
-          <PeriskopeIcon className="h-16 sm:h-20 w-16 sm:w-20" />
-        </div>
+        <PeriskopeIcon className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4" />
         <h1 className="text-2xl sm:text-3xl font-bold text-green-700">Create an Account</h1>
-        <p className="mt-2 text-sm sm:text-base text-gray-600">Join Periskope and start chatting</p>
+        <p className="mt-1 text-sm text-gray-600">Join Periskope and start chatting</p>
       </div>
 
-      {error && (
-        <div className="p-3 bg-red-50 text-red-600 rounded-md text-sm">
-          {error}
-        </div>
-      )}
+      {error && <div className="p-3 bg-red-50 text-red-600 rounded-md text-sm">{error}</div>}
+      {success && <div className="p-3 bg-green-50 text-green-600 rounded-md text-sm">{success}</div>}
 
-      {success && (
-        <div className="p-3 bg-green-50 text-green-600 rounded-md text-sm">
-          {success}
-        </div>
-      )}
-
-      <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSignUp}>
+      <form className="space-y-4" onSubmit={handleSignUp}>
         <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
             Username
           </label>
           <input
@@ -142,14 +135,14 @@ export const SignupForm = () => {
             required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm"
+            className="w-full rounded-xl border border-gray-300 px-4 py-2 text-sm shadow-sm focus:border-green-500 focus:ring-green-500 focus:outline-none transition"
             autoComplete="username"
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email address
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            Email
           </label>
           <input
             id="email"
@@ -158,13 +151,13 @@ export const SignupForm = () => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm"
+            className="w-full rounded-xl border border-gray-300 px-4 py-2 text-sm shadow-sm focus:border-green-500 focus:ring-green-500 focus:outline-none transition"
             autoComplete="email"
           />
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
             Phone Number
           </label>
           <input
@@ -172,20 +165,18 @@ export const SignupForm = () => {
             name="phone"
             type="tel"
             required
-            placeholder="+1 555-123-4567"
+            placeholder="+1 123-456-7890"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm"
+            className="w-full rounded-xl border border-gray-300 px-4 py-2 text-sm shadow-sm focus:border-green-500 focus:ring-green-500 focus:outline-none transition"
             autoComplete="tel"
           />
-          <div className="flex justify-between items-center mt-1 flex-wrap">
-            <p className="text-xs text-gray-500 mr-2">
-              Format: +1 555-123-4567
-            </p>
+          <div className="flex items-center justify-between mt-1 text-xs text-gray-500">
+            <span>Format: +1 123-456-7890</span>
             <button
               type="button"
               onClick={() => setPhone(generateRandomPhone())}
-              className="text-xs text-green-600 hover:text-green-500"
+              className="text-green-600 hover:text-green-500 transition"
             >
               Generate Random
             </button>
@@ -193,7 +184,7 @@ export const SignupForm = () => {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
             Password
           </label>
           <input
@@ -203,32 +194,26 @@ export const SignupForm = () => {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm"
+            className="w-full rounded-xl border border-gray-300 px-4 py-2 text-sm shadow-sm focus:border-green-500 focus:ring-green-500 focus:outline-none transition"
             autoComplete="new-password"
           />
-          <p className="text-xs text-gray-500 mt-1">
-            Password must be at least 6 characters long
-          </p>
+          <p className="text-xs text-gray-500 mt-1">At least 6 characters</p>
         </div>
 
-        <div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
-          >
-            {loading ? "Creating account..." : "Sign up"}
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-green-600 text-white font-medium text-sm py-2 rounded-xl hover:bg-green-700 transition disabled:opacity-50"
+        >
+          {loading ? "Creating account..." : "Sign Up"}
+        </button>
       </form>
 
-      <div className="text-center mt-4">
-        <p className="text-sm text-gray-600">
-          Already have an account?{" "}
-          <Link href="/auth/signin" className="font-medium text-green-600 hover:text-green-500">
-            Sign in
-          </Link>
-        </p>
+      <div className="text-center text-sm text-gray-600">
+        Already have an account?{" "}
+        <Link href="/auth/signin" className="text-green-600 hover:text-green-500 font-medium transition">
+          Sign in
+        </Link>
       </div>
     </div>
   );
