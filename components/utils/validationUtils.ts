@@ -1,6 +1,6 @@
-// Validates phone number format: must start with optional +, followed by 10-15 digits, spaces or hyphens
+// Validates phone number format: must start with optional +91, followed by 10 digits, spaces or hyphens allowed
 export const validatePhone = (phone: string): boolean => {
-  const phoneRegex = /^[+]?[\d\s-]{10,15}$/;
+  const phoneRegex = /^\+91[\s-]?\d{5}[\s-]?\d{5}$/;
   return phoneRegex.test(phone);
 };
 
@@ -20,10 +20,9 @@ export const validateUsername = (username: string): boolean => {
   return username.length >= 3 && username.length <= 30;
 };
 
-// Generates a random US phone number in the format: +1 XXX-XXX-XXXX
+// Generates a random Indian phone number in the format: +91 XXXXX-XXXXX
 export const generateRandomPhone = (): string => {
-  const areaCode = Math.floor(Math.random() * 900) + 100; // 100-999
-  const prefix = Math.floor(Math.random() * 900) + 100; // 100-999
-  const lineNumber = Math.floor(Math.random() * 9000) + 1000; // 1000-9999
-  return `+1 ${areaCode}-${prefix}-${lineNumber}`;
+  const first = Math.floor(Math.random() * 90000) + 10000; // 10000-99999
+  const second = Math.floor(Math.random() * 90000) + 10000; // 10000-99999
+  return `+91 ${first}-${second}`;
 };

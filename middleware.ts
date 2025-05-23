@@ -24,8 +24,8 @@ export async function middleware(req: NextRequest) {
 
   if (isAuthPage) {
     if (isAuth) {
-      // If user is signed in and tries to access auth pages, redirect to chat
-      return NextResponse.redirect(new URL('/chat', req.url));
+      // If user is signed in and tries to access auth pages, redirect to chats
+      return NextResponse.redirect(new URL('/chats', req.url));
     }
     // Allow access to auth pages if not authenticated
     return res;

@@ -165,14 +165,14 @@ export const SignupForm = () => {
             name="phone"
             type="tel"
             required
-            placeholder="+1 123-456-7890"
+            placeholder="+91 12345-67890"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             className="w-full rounded-xl border border-gray-300 px-4 py-2 text-sm shadow-sm focus:border-green-500 focus:ring-green-500 focus:outline-none transition"
             autoComplete="tel"
           />
           <div className="flex items-center justify-between mt-1 text-xs text-gray-500">
-            <span>Format: +1 123-456-7890</span>
+            <span>Format: +91 12345-67890</span>
             <button
               type="button"
               onClick={() => setPhone(generateRandomPhone())}
