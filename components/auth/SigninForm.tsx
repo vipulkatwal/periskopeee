@@ -104,13 +104,13 @@ export const SigninForm = () => {
           </label>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
+          <button
+            type="submit"
+            disabled={loading}
           className="w-full py-2 px-4 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-green-500 transition disabled:opacity-50"
-        >
-          {loading ? "Signing in..." : "Sign in"}
-        </button>
+          >
+            {loading ? "Signing in..." : "Sign in"}
+          </button>
       </form>
 
       <div className="text-center pt-4">

@@ -163,7 +163,7 @@ export const MessageList = ({
       style={{
         overflowY: 'auto',
         overscrollBehavior: 'contain',
-        backgroundImage: "url('/doodle.png')",
+        backgroundImage: "linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('/doodle.png')",
         backgroundRepeat: 'repeat',
         backgroundSize: 'auto'
       }}

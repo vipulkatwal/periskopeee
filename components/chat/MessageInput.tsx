@@ -67,24 +67,24 @@ export const MessageInput = ({
         {/* Message input form */}
         <form onSubmit={handleSubmit} className="flex items-center px-2 sm:px-4 mx-auto">
           <div className="flex flex-1 items-center bg-white border border-gray-200 rounded-xl shadow-sm px-3 sm:px-4 py-1.5 sm:py-2 transition focus-within:border-green-400">
-            <input
-              type="text"
+      <input
+        type="text"
               className="flex-1 bg-transparent border-none outline-none text-md font-medium placeholder-gray-400"
               placeholder="Message..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               aria-label="Type a message"
-            />
-            <button
-              type="submit"
+      />
+      <button
+        type="submit"
               className="ml-2 p-1 text-green-700"
               disabled={!message.trim()}
               aria-label="Send message"
-            >
+      >
               <IoSend className="h-6 w-6" />
-            </button>
+      </button>
           </div>
-        </form>
+    </form>
 
         {/* Message actions toolbar */}
         <nav className="flex items-center justify-between px-2 sm:px-4 mt-2 ml-3.5 sm:mt-3 mx-auto">
